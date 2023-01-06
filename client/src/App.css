@@ -28,6 +28,23 @@
   color: #61dafb;
 }
 
+button {
+  width: 10rem;
+  height: 2.5rem;
+  background: rgb(9, 18, 26);
+  color: #2b53b1;
+  font-size: large;
+  letter-spacing: .5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+
+button:hover {
+  background: rgb(18, 26, 44);
+  color: #3667da;
+}
+
 @keyframes App-logo-animation {
   from {
     transform: translateX(-50%);

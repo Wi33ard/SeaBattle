@@ -1,0 +1,6 @@
+.battle-field-cell {
+  background-color: #394669;
+  width: 10%;
+  aspect-ratio: 1/1;
+  border: solid .1px lightblue;
+}
