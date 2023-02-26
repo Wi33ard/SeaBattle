@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import logo from "./cruiser-military.svg";
+import logo from "./assets/icons/cruiser-military.svg";
 import { Game } from "./components/Game/Game";
 import "./App.css";
 

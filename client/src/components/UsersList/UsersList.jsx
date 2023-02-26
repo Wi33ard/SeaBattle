@@ -13,14 +13,16 @@ query GetUsers {
 
 export const UsersList = () => {
   const { loading, error, data } = useQuery(GET_USERS);
+  
   if (loading) return <p>Loading...</p>;
+  
   if (error) return <p>Error : {error.message}</p>;
   console.log('data: ', data);
 
   return(
     <div className="users-list">
       Users:
-      { data.users.map(user => <h3>{user.name}</h3>)}
+      { data.users.map(user => <h3 key={user.id}>{user.name}</h3>)}
     </div>
   )
 
