@@ -1,0 +1,11 @@
+.battle-field {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #57585b;
+  /* height: 10%; */
+  /* flex: 1; */
+  /* flex: 1 0 auto; */
+  width: 40%;
+  aspect-ratio: 1/1;
+  border: solid 1px lightblue;
+}
