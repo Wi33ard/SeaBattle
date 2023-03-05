@@ -31,8 +31,8 @@
 button {
   width: 10rem;
   height: 2.5rem;
-  background: rgb(9, 18, 26);
-  color: #2b53b1;
+  background: rgb(5, 17, 28);
+  color: #c6c7ca;
   font-size: large;
   letter-spacing: .5rem;
   cursor: pointer;
@@ -42,7 +42,7 @@ button {
 
 button:hover {
   background: rgb(18, 26, 44);
-  color: #3667da;
+  color: #edeef1;
 }
 
 @keyframes App-logo-animation {

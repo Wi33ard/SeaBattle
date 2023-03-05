@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import './styles/BattleFieldCell.css';
 
-interface FieldState {
-  isOccupied: Boolean,
+export enum CellState {
+  Empty,
+  Full,
+  Damaged
 }
 interface BattleFieldCellProps {
   index: Number,
-  fieldState: FieldState
+  cellState: CellState
 }
 
 const gameId = "63f878715dd768d0a905ce7e";
@@ -23,20 +25,22 @@ const SET_CELL_STATUS = gql`
   }
 `;
 
-export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, fieldState }) => {
+export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellState }) => {
   const [updateFieldState, { data, loading, error }] = useMutation(SET_CELL_STATUS);
 
   if (loading) console.log('Loading...');
   if (error) console.log(`Submission error! ${error.message}`);
+  if (data) console.log('data: ', data);
 
-  const handleUpdateStatus = useCallback(() => {
-    updateFieldState({ variables: { gameId, userId, index, state: 1 } });
-  }, [index, updateFieldState]);
+  const handleUpdateState = useCallback(() => {
+    const newState = cellState === CellState.Full ? CellState.Empty: CellState.Full;
+    updateFieldState({ variables: { gameId, userId, index, state: newState } });
+  }, [cellState, index, updateFieldState]);
 
   return (
     <div
-      onClick={handleUpdateStatus}
-      className={`battle-field-cell ${fieldState.isOccupied ? 'occupiedField' : ''}`}
+      onClick={handleUpdateState}
+      className={`battle-field-cell ${cellState === CellState.Full ? 'occupiedField' : ''}`}
     />
   )
 }

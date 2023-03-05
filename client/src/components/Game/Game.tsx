@@ -1,7 +1,6 @@
 import React from 'react';
 import { BattleField } from '../BattleField/BattleField';
-import { UsersList } from '../UsersList/UsersList';
-import { useQuery, gql } from '@apollo/client';
+import { gql, useQuery, useSubscription } from '@apollo/client';
 import './styles/Game.css';
 
 
@@ -15,8 +14,20 @@ const GET_DISPOSITIONS = gql`
   }
 `;
 
+const DISPOSITION_UPDATED_SUBSCRIPTION = gql`
+  subscription DispositionUpdated {
+    dispositionUpdated {
+      gameId
+      userId
+      fields
+    }
+  }
+`;
+
 export const Game = () => {
   const { loading, error, data } = useQuery(GET_DISPOSITIONS);
+  const { data: updatedData } = useSubscription(DISPOSITION_UPDATED_SUBSCRIPTION, {});
+  console.log("updatedData: ", updatedData);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -26,9 +37,8 @@ export const Game = () => {
   return (
     <>
       <div className='main'>
-        <BattleField disposition={data.dispositions[0]} />
+        <BattleField disposition={updatedData?.dispositionUpdated ?? data.dispositions[0]} />
         <BattleField />
-        {/* <UsersList /> */}
       </div>
     </>
   )

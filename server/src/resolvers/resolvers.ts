@@ -1,5 +1,8 @@
 import mongoose, { ObjectId } from "mongoose";
+import { PubSub } from 'graphql-subscriptions';
 import Disposition from "../models/Disposition";
+
+const pubsub = new PubSub();
 
 const users = [
   { id: '4a737d88-0b1b-45dc-96f9-4b5e9d4ad5ce', name: 'Yurozzavr'},
@@ -7,7 +10,10 @@ const users = [
   { id: '15888e46-6e09-494f-ac7a-9903b3b09bcd', name: 'Wizzard'},
 ];
 
+const DISPOSITION_UPDATED = 'DISPOSITION_UPDATED';
+
 const resolvers = {
+  // Q U E R I E S
   Query: {
     users: () => users,
     dispositions: async () => {
@@ -15,6 +21,8 @@ const resolvers = {
       return dispositions;
     },
   },
+
+  // M U T A T I O N S
   Mutation: {
     updateFieldState: (async (_root: {}, args: {gameId: string, userId: string, index: number, state: number}, _ctx: {}) => {
       const { gameId, userId, index, state } = args;
@@ -27,10 +35,18 @@ const resolvers = {
       );
 
       console.log("dispositionUpdated: ", dispositionUpdated);
+      pubsub.publish(DISPOSITION_UPDATED, { dispositionUpdated });
 
       return true;
     }),
-  }
+  },
+
+  // S U B S C R I P T I O N S
+  Subscription: {
+    dispositionUpdated: {
+      subscribe: () => pubsub.asyncIterator([DISPOSITION_UPDATED])
+    },
+  },
 };
 
 export default resolvers;
