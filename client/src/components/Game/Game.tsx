@@ -38,7 +38,7 @@ export const Game = () => {
     <>
       <div className='main'>
         <BattleField disposition={updatedData?.dispositionUpdated ?? data.dispositions[0]} />
-        <BattleField />
+        <BattleField disposition={updatedData?.dispositionUpdated ?? data.dispositions[1]} />
       </div>
     </>
   )

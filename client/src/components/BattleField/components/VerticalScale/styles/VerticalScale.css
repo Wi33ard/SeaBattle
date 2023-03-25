@@ -1,0 +1,20 @@
+.vs-container {
+  height: 100%;
+  width: 25px;
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  position: absolute;
+  left: -25px;
+  top: 0;
+}
+
+.scale-digit {
+  color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}

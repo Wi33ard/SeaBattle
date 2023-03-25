@@ -3,8 +3,9 @@ import { gql, useMutation } from '@apollo/client';
 import './styles/BattleFieldCell.css';
 
 export enum CellState {
+  Unknown = -1,
   Empty,
-  Full,
+  Occupied,
   Damaged
 }
 interface BattleFieldCellProps {
@@ -33,14 +34,27 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellSta
   if (data) console.log('data: ', data);
 
   const handleUpdateState = useCallback(() => {
-    const newState = cellState === CellState.Full ? CellState.Empty: CellState.Full;
+    const newState = cellState === CellState.Occupied ? CellState.Empty: CellState.Occupied;
     updateFieldState({ variables: { gameId, userId, index, state: newState } });
   }, [cellState, index, updateFieldState]);
+
+  const getStyleName = useCallback((cellState: CellState) => {
+    switch(cellState) {
+      case CellState.Empty:
+        return 'emptyField';
+      case CellState.Occupied:
+        return 'occupiedField';
+      case CellState.Damaged:
+        return 'damagedField';
+      default:
+        return 'unknownField';
+    }
+  }, []);
 
   return (
     <div
       onClick={handleUpdateState}
-      className={`battle-field-cell ${cellState === CellState.Full ? 'occupiedField' : ''}`}
+      className={`battle-field-cell ${getStyleName(cellState)}`}
     />
   )
 }

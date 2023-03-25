@@ -1,5 +1,7 @@
 import React from 'react';
 import { BattleFieldCell, CellState } from '../BattleFieldCell/BattleFieldCell';
+import HorizontalScale from './components/HorizontalScale/HorizontalScale';
+import VerticalScale from './components/VerticalScale/VerticalScale';
 import './styles/BattleField.css';
 
 interface Disposition {
@@ -16,10 +18,14 @@ export const BattleField: React.FC<BattleFieldProps> = ({ disposition }) => {
   console.log("BattleField, disposition: ", disposition);
 
   return (
-    <div className='battle-field'>
-      { disposition?.fields.map((field, index) => {
-        return <BattleFieldCell key={index} index={index} cellState={field as CellState} />
-      })}
+    <div className='battle-field-container'>
+      <HorizontalScale />
+      <VerticalScale />
+      <div className='battle-field'>
+        { disposition?.fields.map((field, index) => {
+          return <BattleFieldCell key={index} index={index} cellState={field as CellState} />
+        })}
+      </div>
     </div>
   )
 }
