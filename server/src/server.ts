@@ -1,4 +1,3 @@
-import { createSchema, createYoga } from 'graphql-yoga';
 import { createServer } from 'node:http';
 import mongoose from "mongoose";
 import resolvers from './resolvers/resolvers';
@@ -19,16 +18,6 @@ mongoose
   .then(() => console.log(`DB connected!`))
   .catch((err) => console.error(err));
 
-// const PORT = 4000;
-
-// const yoga = createYoga({
-//   schema: createSchema({
-//     typeDefs,
-//     resolvers
-//   })
-// });
-
-// const server = createServer(yoga);
 async function startApolloServer() {
   // Required logic for integrating with Express
   const app = express();
@@ -84,14 +73,9 @@ async function startApolloServer() {
     }),
   );
 
-  // Modified server startup
+  // server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: process.env.PORT }, resolve));
   console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/`);
-
-
-  // server.listen(process.env.PORT, () => {
-  //   console.info(`Server is running on http://localhost:${process.env.PORT}/graphql`);
-// });
 }
 
 startApolloServer();
