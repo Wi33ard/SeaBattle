@@ -10,23 +10,21 @@ export enum CellState {
 }
 interface BattleFieldCellProps {
   index: Number,
-  cellState: CellState
+  cellState: CellState,
+  dispositionId: string,
 }
 
-const gameId = "63f878715dd768d0a905ce7e";
-const userId = "63f878005dd768d0a905ce7d"
 const SET_CELL_STATUS = gql`
-  mutation SetCellStatus($gameId: String!, $userId: String!, $index: Int!, $state: Int!) {
+  mutation SetCellStatus($dispositionId: ID!, $index: Int!, $state: Int!) {
     updateFieldState (
-      gameId: $gameId,
-      userId: $userId,
+      dispositionId: $dispositionId,
       index: $index,
       state: $state
     )
   }
 `;
 
-export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellState }) => {
+export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellState, dispositionId }) => {
   const [updateFieldState, { data, loading, error }] = useMutation(SET_CELL_STATUS);
 
   if (loading) console.log('Loading...');
@@ -35,8 +33,8 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellSta
 
   const handleUpdateState = useCallback(() => {
     const newState = cellState === CellState.Occupied ? CellState.Empty: CellState.Occupied;
-    updateFieldState({ variables: { gameId, userId, index, state: newState } });
-  }, [cellState, index, updateFieldState]);
+    updateFieldState({ variables: { dispositionId, index, state: newState } });
+  }, [cellState, dispositionId, index, updateFieldState]);
 
   const getStyleName = useCallback((cellState: CellState) => {
     switch(cellState) {

@@ -5,6 +5,7 @@ export const typeDefs = `
   }
 
   type Disposition {
+    id: ID!
     userId: ID!
     gameId: ID!
     fields: [Int]!
@@ -12,14 +13,15 @@ export const typeDefs = `
 
   type Query {
     users: [User]!,
-    dispositions: [Disposition]!
+    dispositions: [Disposition]!,
+    disposition(_id: ID!): Disposition
   }
 
   type Mutation {
-    updateFieldState(gameId: String!, userId: String!, index: Int!, state: Int!): Boolean
+    updateFieldState(dispositionId: ID!, index: Int!, state: Int!): Boolean
   }
 
   type Subscription {
-    dispositionUpdated: Disposition
+    dispositionUpdated(_id: ID!): Disposition
   }
 `;
