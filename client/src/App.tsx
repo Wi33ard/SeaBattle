@@ -3,7 +3,7 @@ import logo from "./assets/icons/cruiser-military.svg";
 import { Game } from "./components/Game/Game";
 import "./App.css";
 
-function App() {
+const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogIn = useCallback(() => {
