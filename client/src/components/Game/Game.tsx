@@ -1,6 +1,7 @@
 import React from 'react';
 import { BattleField } from '../BattleField/BattleField';
 import { gql, useQuery } from '@apollo/client';
+import GameStateInfo from './GameStateInfo';
 import './styles/Game.css';
 
 
@@ -23,11 +24,15 @@ export const Game = () => {
   if (error) return <p>Error : {error.message}</p>;
  
   return (
-    <>
-      <div className='main'>
+    <div className='main'>
+      <GameStateInfo />
+      <div className='battle-fields'>
         <BattleField dispositionId={data.dispositions[0].id} />
         <BattleField dispositionId={data.dispositions[1].id} />
       </div>
-    </>
+      <div className='toolbar'>
+        <button onClick={() =>{}}>Start</button>
+      </div>
+    </div>
   )
 }

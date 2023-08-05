@@ -1,0 +1,9 @@
+.game-state-info {
+  background-color: black;
+  color: lightgreen;
+  padding: .5rem;
+  font-size: 1.4rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

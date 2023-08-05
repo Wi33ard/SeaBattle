@@ -57,7 +57,7 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
           return <BattleFieldCell key={index} index={index} cellState={field as CellState} dispositionId={dispositionId} />
         })}
       </div>
-      <button onClick={() => refetch({ id: dispositionId })}>refresh</button>
+      {/* <button onClick={() => refetch({ id: dispositionId })}>refresh</button> */}
     </div>
   )
 }
