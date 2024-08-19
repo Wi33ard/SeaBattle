@@ -1,5 +1,4 @@
 .battle-field-cell {
-  background-color: #394669;
   width: 10%;
   aspect-ratio: 1/1;
   border: solid .1px lightblue;
@@ -7,4 +6,16 @@
 
 .occupiedField {
   background-color: darkolivegreen;
+}
+
+.damagedField {
+  background-color: rgb(154, 12, 12);
+}
+
+.unknownField {
+  background-color: rgb(5, 5, 5);
+}
+
+.emptyField {
+  background-color: #394669;
 }

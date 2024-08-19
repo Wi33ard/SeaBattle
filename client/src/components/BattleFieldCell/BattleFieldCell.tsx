@@ -2,41 +2,57 @@ import React, { useCallback } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import './styles/BattleFieldCell.css';
 
-interface FieldState {
-  isOccupied: Boolean,
+export enum CellState {
+  Unknown = -1,
+  Empty,
+  Occupied,
+  Damaged
 }
 interface BattleFieldCellProps {
   index: Number,
-  fieldState: FieldState
+  cellState: CellState,
+  dispositionId: string,
 }
 
-const gameId = "63f878715dd768d0a905ce7e";
-const userId = "63f878005dd768d0a905ce7d"
 const SET_CELL_STATUS = gql`
-  mutation SetCellStatus($gameId: String!, $userId: String!, $index: Int!, $state: Int!) {
+  mutation SetCellStatus($dispositionId: ID!, $index: Int!, $state: Int!) {
     updateFieldState (
-      gameId: $gameId,
-      userId: $userId,
+      dispositionId: $dispositionId,
       index: $index,
       state: $state
     )
   }
 `;
 
-export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, fieldState }) => {
+export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellState, dispositionId }) => {
   const [updateFieldState, { data, loading, error }] = useMutation(SET_CELL_STATUS);
 
   if (loading) console.log('Loading...');
   if (error) console.log(`Submission error! ${error.message}`);
+  if (data) console.log('data: ', data);
 
-  const handleUpdateStatus = useCallback(() => {
-    updateFieldState({ variables: { gameId, userId, index, state: 1 } });
-  }, [index, updateFieldState]);
+  const handleUpdateState = useCallback(() => {
+    const newState = cellState === CellState.Occupied ? CellState.Empty: CellState.Occupied;
+    updateFieldState({ variables: { dispositionId, index, state: newState } });
+  }, [cellState, dispositionId, index, updateFieldState]);
+
+  const getStyleName = useCallback((cellState: CellState) => {
+    switch(cellState) {
+      case CellState.Empty:
+        return 'emptyField';
+      case CellState.Occupied:
+        return 'occupiedField';
+      case CellState.Damaged:
+        return 'damagedField';
+      default:
+        return 'unknownField';
+    }
+  }, []);
 
   return (
     <div
-      onClick={handleUpdateStatus}
-      className={`battle-field-cell ${fieldState.isOccupied ? 'occupiedField' : ''}`}
+      onClick={handleUpdateState}
+      className={`battle-field-cell ${getStyleName(cellState)}`}
     />
   )
 }
