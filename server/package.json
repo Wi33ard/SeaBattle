@@ -1,10 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "server.ts",
   "license": "MIT",
   "scripts": {
-    "start": "node server",
+    "start": "ts-node src/server",
     "start:dev": "npx nodemon"
   },
   "dependencies": {
