@@ -1,0 +1,27 @@
+.navmenu {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  /* background-color: antiquewhite; */
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    /* border: solid 1px red; */
+  }
+
+  li {
+    cursor: pointer;
+    /* border: solid 1px red; */
+
+    &:hover {
+      font-weight: 600;
+    }
+  }
+}

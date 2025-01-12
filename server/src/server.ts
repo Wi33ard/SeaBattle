@@ -12,6 +12,7 @@ import cors from 'cors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
+import authRouter from './auth/authRouter';
 
 mongoose
   .connect(process.env.DATABASE_URL!)
@@ -21,6 +22,8 @@ mongoose
 async function startApolloServer() {
   // Required logic for integrating with Express
   const app = express();
+  app.use(express.json());
+  app.use("/auth", authRouter);
   // Our httpServer handles incoming requests to our Express app.
   // Below, we tell Apollo Server to "drain" this httpServer,
   // enabling our servers to shut down gracefully.

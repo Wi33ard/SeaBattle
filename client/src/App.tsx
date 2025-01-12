@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import logo from "./assets/icons/cruiser-military.svg";
 import { Game } from "./components/Game/Game";
+import { Provider } from "react-redux";
+import { store } from "./store";
 import "./App.css";
 
 const App = () => {
@@ -11,7 +13,11 @@ const App = () => {
   }, []);
 
   if (isLoggedIn) {
-    return <Game />;
+    return (
+      <Provider store={store}>
+        <Game />
+      </Provider>
+    )
   }
 
   return (
