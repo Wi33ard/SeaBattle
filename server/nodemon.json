@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": ".ts,.js",
   "ignore": [],
-  "exec": "npx ts-node --esm ./src/server"
+  "exec": "ts-node ./src/server.ts"
 }

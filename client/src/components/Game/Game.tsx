@@ -1,20 +1,10 @@
-import React from 'react';
+import { useQuery } from '@apollo/client';
 import { BattleField } from '../BattleField/BattleField';
-import { gql, useQuery } from '@apollo/client';
 import GameStateInfo from './GameStateInfo';
+import { Header } from '../Header/Header';
+import { GET_DISPOSITIONS } from '../../graphql/queries';
 import './styles/Game.css';
 
-
-const GET_DISPOSITIONS = gql`
-  query getDispositions {
-    dispositions {
-      id
-      userId
-      gameId
-      fields
-    }
-  }
-`;
 
 export const Game = () => {
   const { loading, error, data } = useQuery(GET_DISPOSITIONS);
@@ -25,6 +15,7 @@ export const Game = () => {
  
   return (
     <div className='main'>
+      <Header />
       <GameStateInfo />
       <div className='battle-fields'>
         <BattleField dispositionId={data.dispositions[0].id} />

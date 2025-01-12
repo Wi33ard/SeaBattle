@@ -1,28 +1,14 @@
 import React, { useCallback } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { SET_CELL_STATUS } from '../../graphql/mutations';
+import { CellState } from '../../types';
 import './styles/BattleFieldCell.css';
 
-export enum CellState {
-  Unknown = -1,
-  Empty,
-  Occupied,
-  Damaged
-}
 interface BattleFieldCellProps {
   index: Number,
   cellState: CellState,
   dispositionId: string,
 }
-
-const SET_CELL_STATUS = gql`
-  mutation SetCellStatus($dispositionId: ID!, $index: Int!, $state: Int!) {
-    updateFieldState (
-      dispositionId: $dispositionId,
-      index: $index,
-      state: $state
-    )
-  }
-`;
 
 export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellState, dispositionId }) => {
   const [updateFieldState, { data, loading, error }] = useMutation(SET_CELL_STATUS);
