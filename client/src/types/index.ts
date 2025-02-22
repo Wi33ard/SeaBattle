@@ -16,3 +16,8 @@ export type User = {
   username: string;
   email: string;
 }
+
+export enum Orientation {
+  Horizontal= 'horizontal',
+  Vertical= 'vertical',
+};

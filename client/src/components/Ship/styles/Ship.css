@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box
+}
+
+.ship {
+  display: flex;
+  width: fit-content;
+  border: solid 1px lightblue;
+  cursor: pointer;
+}
+
+.shipDeck {
+  width: 50px;
+  height: 50px;
+  background-color: darkolivegreen;
+  display: inline-block;
+}

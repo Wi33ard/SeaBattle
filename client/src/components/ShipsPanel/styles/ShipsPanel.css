@@ -1,0 +1,35 @@
+.shipsPanelContainer {
+ display: flex;
+ flex-direction: row;
+ position: absolute;
+ left: 0;
+ bottom: 75px;
+ transition: all;
+ transition-duration: 200ms;
+}
+
+.shipsPanel {
+  width: 300px;
+  height: 268px;
+  border: solid 1px lightseagreen;
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shipSlot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.counter {
+  color: lightblue;
+}
+
+.toggleButton {
+  width: 42px;
+  height: 42px;
+}

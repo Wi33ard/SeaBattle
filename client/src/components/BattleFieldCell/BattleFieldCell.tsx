@@ -1,17 +1,33 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { SET_CELL_STATUS } from '../../graphql/mutations';
 import { CellState } from '../../types';
+import { useDroppable } from '@dnd-kit/core';
 import './styles/BattleFieldCell.css';
 
 interface BattleFieldCellProps {
-  index: Number,
+  index: number,
   cellState: CellState,
   dispositionId: string,
 }
 
 export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellState, dispositionId }) => {
   const [updateFieldState, { data, loading, error }] = useMutation(SET_CELL_STATUS);
+
+  const {isOver, setNodeRef} = useDroppable({
+    id: `${dispositionId}-${index}`,
+  });
+
+  const style = {
+    background: isOver ? 'green' : undefined,
+  };
+
+  useEffect(() => {
+    if (isOver) {
+      console.log('index: ', index);
+      console.log('isOver: ', isOver);
+    }
+  }, [isOver]);
 
   if (loading) console.log('Loading...');
   if (error) console.log(`Submission error! ${error.message}`);
@@ -37,8 +53,10 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({ index, cellSta
 
   return (
     <div
+      ref={setNodeRef}
       onClick={handleUpdateState}
       className={`battle-field-cell ${getStyleName(cellState)}`}
+      style={style}
     />
   )
 }
