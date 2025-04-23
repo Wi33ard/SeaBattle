@@ -2,6 +2,7 @@
   width: 10%;
   aspect-ratio: 1/1;
   border: solid .1px lightblue;
+  transition: all 0.2s ease;
 }
 
 .occupiedField {
@@ -18,4 +19,12 @@
 
 .emptyField {
   background-color: #394669;
+}
+
+/* Drag over states */
+.battle-field-cell.is-over {
+/* .battle-field-cell[data-is-over="true"] { */
+  background-color: rgba(0, 255, 0, 0.3) !important;
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }

@@ -13,9 +13,8 @@ const shipsSet: Record<TDeckCount, number> = {
 
 const ShipsPanel = () => {
   const [isPanelShown, setPanelShown] = useState(true);
-
-const left = isPanelShown ? '0' : '-300px';
-const toggleButtonText = isPanelShown ? '<<' : '>>';
+  const left = isPanelShown ? '0' : '-300px';
+  const toggleButtonText = isPanelShown ? '<<' : '>>';
 
   const handleTogglePanel = useCallback(() => {
     setPanelShown((prev) => !prev);
@@ -24,9 +23,9 @@ const toggleButtonText = isPanelShown ? '<<' : '>>';
   const shipsPanelComponent = (
     <div className='shipsPanelContainer' style={{ left }}>
       <div className="shipsPanel">
-        {Object.keys(shipsSet).map((deckCount) => {
+        {Object.keys(shipsSet).map((deckCount, index) => {
           return (
-            <div className='shipSlot'>
+            <div className='shipSlot' key={index}>
               <Ship deckCount={Number(deckCount)} />
               <span className='counter'>x{shipsSet[deckCount as TDeckCount]}</span>
             </div>

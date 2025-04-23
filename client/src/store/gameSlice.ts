@@ -2,12 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GameStatus } from '../types';
 
-export interface GameState {
-  status: GameStatus|undefined,
+export interface IGameState {
+  status: GameStatus | undefined,
+  myDispositionId: string | undefined,
 };
 
-const initialState: GameState = {
+const initialState: IGameState = {
   status: undefined,
+  myDispositionId: undefined,
 };
 
 export const gameSlice = createSlice({
@@ -23,10 +25,13 @@ export const gameSlice = createSlice({
     finish: (state) => {
       state.status = GameStatus.Ended;
     },
+    setMyDispositionId: (state, payload) => {
+      state.myDispositionId = payload.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { create, start, finish } = gameSlice.actions;
+export const { create, start, finish, setMyDispositionId } = gameSlice.actions;
 
 export default gameSlice.reducer;

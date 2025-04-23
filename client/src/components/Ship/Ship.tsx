@@ -1,12 +1,11 @@
 import { useDraggable } from "@dnd-kit/core";
 import { Orientation } from "../../types";
-import  "./styles/Ship.css";
-
+import "./styles/Ship.css";
 
 interface ShipProps {
   deckCount: number;
   orientation?: Orientation;
-};
+}
 
 const Ship = ({ deckCount }: ShipProps) => {
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
@@ -14,7 +13,7 @@ const Ship = ({ deckCount }: ShipProps) => {
   });
 
   const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0) scale(1.3)`,
   } : undefined;
   
   return (
@@ -25,8 +24,8 @@ const Ship = ({ deckCount }: ShipProps) => {
       {...listeners}
       {...attributes}
     >
-      {Array.from({ length: deckCount}).map(() => (
-          <div className="shipDeck"></div>
+      {Array.from({ length: deckCount}).map((_, index) => (
+          <div className="shipDeck" key={index}></div>
       ))}
     </div>
   )
