@@ -25,7 +25,7 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
   const isMyDisposition = dispositionId === myDispositionId;
   // console.log(data);
   // console.log("updatedData: ", updatedData);
-  console.log("BattleField");
+  // console.log("BattleField");
 
   useEffect(() => {
     refetch({ id: dispositionId })

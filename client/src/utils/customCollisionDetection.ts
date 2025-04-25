@@ -10,6 +10,7 @@ export const useOverlapCollisionDetection: CollisionDetection = ({
 }) => {
   const dispatch = useAppDispatch();
   const startTime = performance.now();
+  let countCalculations = 0;
 
   // If no active item or collision rectangle, return empty array
   if (!active || !collisionRect) return [];
@@ -21,20 +22,22 @@ export const useOverlapCollisionDetection: CollisionDetection = ({
     return [] as Collision[];
   }
 
-  // console.log('active: ', active);
-  // console.log('collisionRect: ', collisionRect);
-  // console.log('droppableContainers: ', droppableContainers);
-  // return [] as Collision[];
-
   const dummyCollision = { id: 'id'};
   
   // Filter and map droppable containers to find collisions
   const collisions: Collision[] = droppableContainers
     .filter(container => {
-      // Skip certain elements if needed (optional)
-      return true;
+      const containerRect = container.rect.current;
+
+      if (!containerRect) return false;
+
+      return activeRect.right >= containerRect.left
+        && activeRect.left <= containerRect.right
+        && activeRect.top <= containerRect.bottom
+        && activeRect.bottom >= containerRect.top;
     })
     .map(container => {
+      countCalculations++;
       const containerRect = container.rect.current;
       
       if (!containerRect) return dummyCollision;
@@ -54,20 +57,12 @@ export const useOverlapCollisionDetection: CollisionDetection = ({
       );
       
       const overlapArea = overlapX * overlapY;
-      const activeArea = activeRect.width * activeRect.height / Number(active.id);
+      const activeArea = activeRect.width * activeRect.height * 1.3 / Number(active.id);
       const overlapPercentage = overlapArea / activeArea;
-      // console.log('overlapPercentage: ', overlapPercentage);
       
-      const OVERLAP_THRESHOLD = 0.6;
+      const OVERLAP_THRESHOLD = 0.35;
       
       if (overlapPercentage > OVERLAP_THRESHOLD) {
-        // console.log('activeRect: ', activeRect);
-        // console.log('containerRect: ', containerRect);
-        // console.log('overlapX: ', overlapX);
-        // console.log('overlapY: ', overlapY);
-        // console.log('overlapArea: ', overlapArea);
-        // console.log('activeArea: ', activeArea);
-
         return {
           id: container.id,
           data: {
@@ -80,12 +75,9 @@ export const useOverlapCollisionDetection: CollisionDetection = ({
       return dummyCollision;
     }).filter(collision => collision.id !== dummyCollision.id);
     
-    // console.log('collisions: ', collisions);
-
     const endTime = performance.now();
     const timeDiff = endTime - startTime; //in ms 
-    const milliseconds = Math.round(timeDiff);
-    // console.log('%c Time elapsed: ', 'background: red; color: white', milliseconds + " ms");
+    const milliseconds = timeDiff;
     dispatch(addTime(milliseconds));
 
     return collisions;

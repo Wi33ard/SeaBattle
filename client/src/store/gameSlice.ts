@@ -3,12 +3,12 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { GameStatus } from '../types';
 
 export interface IGameState {
-  status: GameStatus | undefined,
+  status: GameStatus,
   myDispositionId: string | undefined,
 };
 
 const initialState: IGameState = {
-  status: undefined,
+  status: GameStatus.Created,
   myDispositionId: undefined,
 };
 

@@ -3,6 +3,10 @@
   aspect-ratio: 1/1;
   border: solid .1px lightblue;
   transition: all 0.2s ease;
+  font-weight: 300;
+  color: rgba(173, 216, 230, 0.627);
+  padding: 2px 4px;
+  font-size: 0.75rem;
 }
 
 .occupiedField {

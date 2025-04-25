@@ -39,7 +39,7 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({
       case CellState.Empty:
         return 'emptyField';
       case CellState.Occupied:
-        return 'occupiedField';
+        return isMyDisposition ? 'occupiedField' : 'emptyField';
       case CellState.Damaged:
         return 'damagedField';
       default:
@@ -47,19 +47,26 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({
     }
   }, []);
 
-  const handleUpdateState = useCallback(() => {
-    const newState = cellState === CellState.Occupied ? CellState.Empty: CellState.Occupied;
+  const handleCellClick = useCallback(() => {
+    let newState = CellState.Empty;
+
+    if (!isMyDisposition) {
+      newState = cellState === CellState.Occupied ? CellState.Damaged : CellState.Empty;
+    } else {
+      newState = cellState === CellState.Occupied ? CellState.Empty: CellState.Occupied;
+    }    
+    
     updateFieldState({ variables: { dispositionId, index, state: newState } });
   }, [cellState, dispositionId, index, updateFieldState]);
 
   return (
     <div
       ref={setNodeRef}
-      onClick={handleUpdateState}
+      onClick={handleCellClick}
       className={`battle-field-cell ${getStyleName(cellState)} ${showIsOver ? 'is-over' : ''}`}
       data-is-over={showIsOver}
     >
-      {/* {index} */}
+      {index}
     </div>
   )
 }

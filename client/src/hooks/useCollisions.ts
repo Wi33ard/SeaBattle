@@ -1,8 +1,8 @@
-import { useDndMonitor } from '@dnd-kit/core';
+import { Collision, useDndMonitor } from '@dnd-kit/core';
 import { useState, useEffect } from 'react';
 
 export const useCollisions = () => {
-  const [collisions, setCollisions] = useState<any[]>([]);
+  const [collisions, setCollisions] = useState<Collision[]>([]);
   const [isDragging, setIsDragging] = useState(false);
 
   useDndMonitor({
@@ -13,7 +13,7 @@ export const useCollisions = () => {
       setIsDragging(false);
       setCollisions([]);
     },
-    onDragOver: (event) => {
+    onDragMove: (event) => {
       if (event.collisions) {
         setCollisions(event.collisions);
       }

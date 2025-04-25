@@ -5,11 +5,13 @@ import "./styles/Ship.css";
 interface ShipProps {
   deckCount: number;
   orientation?: Orientation;
+  disabled: boolean;
 }
 
-const Ship = ({ deckCount }: ShipProps) => {
+const Ship = ({ deckCount, disabled }: ShipProps) => {
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
     id: deckCount,
+    disabled,
   });
 
   const style = transform ? {
@@ -25,7 +27,11 @@ const Ship = ({ deckCount }: ShipProps) => {
       {...attributes}
     >
       {Array.from({ length: deckCount}).map((_, index) => (
-          <div className="shipDeck" key={index}></div>
+          <div
+            key={index}
+            className="shipDeck"
+            style={disabled ? {opacity: 0} : undefined}
+          />
       ))}
     </div>
   )
