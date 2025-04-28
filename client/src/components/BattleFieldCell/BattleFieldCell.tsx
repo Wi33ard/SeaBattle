@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { SET_CELL_STATUS } from '../../graphql/mutations';
 import { CellState } from '../../types';
 import { useDroppable } from '@dnd-kit/core';
-import { useCollisions } from '../../hooks/useCollisions';
+import { useCollisions } from '../../utils/hooks/useCollisions';
 import './styles/BattleFieldCell.css';
 
 interface BattleFieldCellProps {

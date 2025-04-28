@@ -1,6 +1,7 @@
 import mongoose, { ObjectId } from "mongoose";
 import { PubSub } from 'graphql-subscriptions';
 import Disposition from "../models/Disposition";
+import User from "../models/User";
 
 const pubsub = new PubSub();
 
@@ -15,9 +16,13 @@ const DISPOSITION_UPDATED = 'DISPOSITION_UPDATED';
 const resolvers = {
   // Q U E R I E S
   Query: {
-    users: () => users,
+    users: async () => {
+      const users = await User.find({});
+      return users;
+    },
     dispositions: async () => {
       const dispositions = await Disposition.find({});
+      console.log("dispositions: ", dispositions);
       return dispositions;
     },
     // @ts-ignore

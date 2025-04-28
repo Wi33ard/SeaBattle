@@ -7,6 +7,7 @@ import { DISPOSITION_UPDATED_SUBSCRIPTION, GET_DISPOSITION } from '../../graphql
 import { CellState } from '../../types';
 import { useAppSelector } from '../../utils/hooks/reduxHooks';
 import './styles/BattleField.css';
+import { INITIAL_OWN_DISPOSITION, INITIAL_RIVAL_DISPOSITION } from '../../store/const';
 
 interface Disposition {
   userId: string,
@@ -23,6 +24,7 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
   const { data: updatedData } = useSubscription(DISPOSITION_UPDATED_SUBSCRIPTION, { variables: { id: dispositionId }});
   const myDispositionId = useAppSelector((state) => state.game.myDispositionId);
   const isMyDisposition = dispositionId === myDispositionId;
+  const disposition = isMyDisposition ? INITIAL_OWN_DISPOSITION : INITIAL_RIVAL_DISPOSITION;
   // console.log(data);
   // console.log("updatedData: ", updatedData);
   // console.log("BattleField");
@@ -39,7 +41,8 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
       <HorizontalScale />
       <VerticalScale />
       <div className='battle-field'>
-        { data?.disposition?.fields.map((field, index) => {
+        {/* { data?.disposition?.fields.map((field, index) => { */}
+        { disposition.map((field, index) => {
           return (
             <BattleFieldCell
               key={index}

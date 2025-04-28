@@ -3,10 +3,12 @@ import logo from "./assets/icons/cruiser-military.svg";
 import { Game } from "./components/Game/Game";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import Room from "./components/Room/Room";
 import "./App.css";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isJoined, setIsJoined] = useState(false);
 
   const handleLogIn = useCallback(() => {
     setIsLoggedIn(true);
@@ -15,7 +17,11 @@ const App = () => {
   if (isLoggedIn) {
     return (
       <Provider store={store}>
-        <Game />
+        {!isJoined ? (
+          <Room join={setIsJoined} />
+        ) : (
+          <Game />
+        )}
       </Provider>
     )
   }

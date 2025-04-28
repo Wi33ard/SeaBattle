@@ -1,5 +1,5 @@
 import { Collision, useDndMonitor } from '@dnd-kit/core';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const useCollisions = () => {
   const [collisions, setCollisions] = useState<Collision[]>([]);
