@@ -1,19 +1,19 @@
-import mongoose, { ObjectId } from "mongoose";
 import { PubSub } from 'graphql-subscriptions';
 import Disposition from "../models/Disposition";
 import User from "../models/User";
+import { DateTimeResolver } from 'graphql-scalars';
+import Game from "../models/Game";
 
 const pubsub = new PubSub();
 
-const users = [
-  { id: '4a737d88-0b1b-45dc-96f9-4b5e9d4ad5ce', name: 'Yurozzavr'},
-  { id: 'c699a58a-72ca-4bde-b74c-5b957f9b1cf2', name: 'Valcyria'},
-  { id: '15888e46-6e09-494f-ac7a-9903b3b09bcd', name: 'Wizzard'},
-];
-
 const DISPOSITION_UPDATED = 'DISPOSITION_UPDATED';
+const GAME_CREATED = 'GAME_CREATED';
+const GAME_DELETED = 'GAME_DELETED';
 
 const resolvers = {
+  // T Y P E S
+  DateTime: DateTimeResolver,
+
   // Q U E R I E S
   Query: {
     users: async () => {
@@ -22,15 +22,17 @@ const resolvers = {
     },
     dispositions: async () => {
       const dispositions = await Disposition.find({});
-      console.log("dispositions: ", dispositions);
       return dispositions;
     },
     // @ts-ignore
     disposition: async (_parent, args, _context, _info) => {
-      console.log("disposition, args: ", args);
       const disposition = await Disposition.findOne({ _id: args._id });
-      console.log("disposition: ", disposition);
       return disposition;
+    },
+    games: async () => {
+      const games = await Game.find({}).populate('user1').populate('user2');
+      console.log('games: ', games);
+      return games;
     }
   },
 
@@ -51,12 +53,41 @@ const resolvers = {
 
       return true;
     }),
+    createGame: (async (_parent: {}, args: {userId: string}, _context: {}) => {
+      const { userId } = args;
+
+      const gameCreated = await Game.create({
+        user1: userId
+      }).then((game) => game.populate('user1', 'name'));
+
+      pubsub.publish(GAME_CREATED, { gameCreated });
+
+      return gameCreated;
+    }),
+    deleteGame: (async (_parent: {}, args: {id: string}, _context: {}) => {
+      const { id } = args;
+
+      const result = await Game.deleteOne({ id });
+      console.log('delete result: ', result);
+
+      // if (result.deletedCount > 0) {
+        pubsub.publish(GAME_DELETED, { gameDeleted: id });
+      // }
+
+      return id;
+    })
   },
 
   // S U B S C R I P T I O N S
   Subscription: {
     dispositionUpdated: {
       subscribe: () => pubsub.asyncIterator([DISPOSITION_UPDATED])
+    },
+    gameCreated: {
+      subscribe: () => pubsub.asyncIterator([GAME_CREATED])
+    },
+    gameDeleted: {
+      subscribe: () => pubsub.asyncIterator([GAME_DELETED])
     },
   },
 };

@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react';
-import { gql, useQuery, useSubscription } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { BattleFieldCell } from '../BattleFieldCell/BattleFieldCell';
 import HorizontalScale from './components/HorizontalScale/HorizontalScale';
 import VerticalScale from './components/VerticalScale/VerticalScale';
 import { DISPOSITION_UPDATED_SUBSCRIPTION, GET_DISPOSITION } from '../../graphql/queries';
-import { CellState } from '../../types';
+import { CellState, Disposition } from '../../types';
 import { useAppSelector } from '../../utils/hooks/reduxHooks';
-import './styles/BattleField.css';
 import { INITIAL_OWN_DISPOSITION, INITIAL_RIVAL_DISPOSITION } from '../../store/const';
-
-interface Disposition {
-  userId: string,
-  gameId: string,
-  fields: Number[],
-}
+import './styles/BattleField.css';
 
 interface BattleFieldProps {
   dispositionId: string
@@ -25,9 +19,6 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
   const myDispositionId = useAppSelector((state) => state.game.myDispositionId);
   const isMyDisposition = dispositionId === myDispositionId;
   const disposition = isMyDisposition ? INITIAL_OWN_DISPOSITION : INITIAL_RIVAL_DISPOSITION;
-  // console.log(data);
-  // console.log("updatedData: ", updatedData);
-  // console.log("BattleField");
 
   useEffect(() => {
     refetch({ id: dispositionId })
@@ -54,7 +45,6 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
           )
         })}
       </div>
-      {/* <button onClick={() => refetch({ id: dispositionId })}>refresh</button> */}
     </div>
   )
 }

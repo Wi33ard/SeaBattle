@@ -26,7 +26,7 @@ export const NavMenu = () => {
       }
 
       <ul>
-        <li onClick={toggleLoginForm}>{user?.username || 'Login'}</li>
+        <li onClick={toggleLoginForm}>{user?.name || 'Login'}</li>
         <li>Settings</li>
         <li>Help</li>
       </ul>

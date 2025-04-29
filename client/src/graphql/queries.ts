@@ -30,3 +30,21 @@ export const GET_DISPOSITIONS = gql`
     }
   }
 `;
+
+export const GET_GAMES = gql`
+  query getGames {
+    games {
+      id
+      user1 {
+        id
+        name
+        rating
+      }
+      user2 {
+        id
+        name
+        rating
+      }
+    }
+  }
+`;

@@ -9,3 +9,21 @@ export const SET_CELL_STATUS = gql`
     )
   }
 `;
+
+export const CREATE_GAME = gql`
+  mutation CreateGame($userId: ID!) {
+    createGame (userId: $userId) {
+      id
+      user1 {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const DELETE_GAME = gql`
+  mutation DeleteGame($id: ID!) {
+    deleteGame (id: $id)
+  }
+`;
