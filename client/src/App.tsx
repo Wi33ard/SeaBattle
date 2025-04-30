@@ -4,24 +4,23 @@ import { Game } from "./components/Game/Game";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import Room from "./components/Room/Room";
+import { Outlet, useNavigate } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogIn = useCallback(() => {
     setIsLoggedIn(true);
-  }, []);
+    navigate('room');
+  }, [navigate]);
 
   if (isLoggedIn) {
     return (
       <Provider store={store}>
-        {!isJoined ? (
-          <Room join={setIsJoined} />
-        ) : (
-          <Game />
-        )}
+        <Outlet />
       </Provider>
     )
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   ApolloClient,
@@ -11,13 +10,8 @@ import {
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
+import AppRoutes from './routes/AppRoutes';
 import './index.css';
-
-
-// const client = new ApolloClient({
-//   uri: "http://localhost:4000/graphql",
-//   cache: new InMemoryCache(),
-// });
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql'
@@ -47,9 +41,9 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-     <ApolloProvider client={client}>
-      <App />
-     </ApolloProvider>
+    <ApolloProvider client={client}>
+      <AppRoutes />
+    </ApolloProvider>
   </React.StrictMode>
 );
 

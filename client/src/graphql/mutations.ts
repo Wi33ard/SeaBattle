@@ -27,3 +27,11 @@ export const DELETE_GAME = gql`
     deleteGame (id: $id)
   }
 `;
+
+export const CREATE_DISPOSITION = gql`
+  mutation CreateDisposition($gameId: ID!, $userId: ID!) {
+    createDisposition (gameId: $gameId, userId: $userId) {
+      id
+    }
+  }
+`;

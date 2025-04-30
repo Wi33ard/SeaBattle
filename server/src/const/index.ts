@@ -1,0 +1,7 @@
+
+export const FIELDS_COUNT = 10 * 10;
+
+export const DISPOSITION_UPDATED = 'DISPOSITION_UPDATED';
+export const GAME_CREATED = 'GAME_CREATED';
+export const GAME_DELETED = 'GAME_DELETED';
+

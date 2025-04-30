@@ -6,7 +6,7 @@ import VerticalScale from './components/VerticalScale/VerticalScale';
 import { DISPOSITION_UPDATED_SUBSCRIPTION, GET_DISPOSITION } from '../../graphql/queries';
 import { CellState, Disposition } from '../../types';
 import { useAppSelector } from '../../utils/hooks/reduxHooks';
-import { INITIAL_OWN_DISPOSITION, INITIAL_RIVAL_DISPOSITION } from '../../store/const';
+import { INITIAL_OWN_DISPOSITION, INITIAL_RIVAL_DISPOSITION } from '../../const';
 import './styles/BattleField.css';
 
 interface BattleFieldProps {
@@ -32,8 +32,8 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
       <HorizontalScale />
       <VerticalScale />
       <div className='battle-field'>
-        {/* { data?.disposition?.fields.map((field, index) => { */}
-        { disposition.map((field, index) => {
+        { data?.disposition?.fields.map((field, index) => {
+        // { disposition.map((field, index) => {
           return (
             <BattleFieldCell
               key={index}

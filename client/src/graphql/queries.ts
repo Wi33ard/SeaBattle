@@ -21,8 +21,8 @@ export const DISPOSITION_UPDATED_SUBSCRIPTION = gql`
 `;
 
 export const GET_DISPOSITIONS = gql`
-  query getDispositions {
-    dispositions {
+  query getDispositions($gameId: ID!) {
+    dispositions(gameId: $gameId) {
       id
       userId
       gameId

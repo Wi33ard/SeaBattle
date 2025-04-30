@@ -1,14 +1,11 @@
 import { PubSub } from 'graphql-subscriptions';
 import Disposition from "../models/Disposition";
 import User from "../models/User";
-import { DateTimeResolver } from 'graphql-scalars';
 import Game from "../models/Game";
+import { DateTimeResolver } from 'graphql-scalars';
+import { DISPOSITION_UPDATED, FIELDS_COUNT, GAME_CREATED, GAME_DELETED } from '../const';
 
 const pubsub = new PubSub();
-
-const DISPOSITION_UPDATED = 'DISPOSITION_UPDATED';
-const GAME_CREATED = 'GAME_CREATED';
-const GAME_DELETED = 'GAME_DELETED';
 
 const resolvers = {
   // T Y P E S
@@ -20,8 +17,10 @@ const resolvers = {
       const users = await User.find({});
       return users;
     },
-    dispositions: async () => {
-      const dispositions = await Disposition.find({});
+    // @ts-ignore
+    dispositions: async (_parent, args, _context, _info) => {
+      const { gameId } = args;
+      const dispositions = await Disposition.find({ gameId });
       return dispositions;
     },
     // @ts-ignore
@@ -68,14 +67,25 @@ const resolvers = {
       const { id } = args;
 
       const result = await Game.deleteOne({ id });
-      console.log('delete result: ', result);
 
-      // if (result.deletedCount > 0) {
+      if (result.deletedCount > 0) {
         pubsub.publish(GAME_DELETED, { gameDeleted: id });
-      // }
+      }
 
       return id;
-    })
+    }),
+    createDisposition: (async (_parent: {}, args: {gameId: string, userId: string}, _context: {}) => {
+      const { gameId, userId } = args;
+
+      const disposition = await Disposition.create({
+        gameId,
+        userId,
+        fields: new Array(FIELDS_COUNT).fill(0),
+        open: new Array(FIELDS_COUNT).fill(false),
+      });
+
+      return disposition;
+    }),
   },
 
   // S U B S C R I P T I O N S

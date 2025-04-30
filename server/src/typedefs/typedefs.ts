@@ -24,7 +24,7 @@ export const typeDefs = `
 
   type Query {
     users: [User]!,
-    dispositions: [Disposition]!,
+    dispositions(gameId: ID!): [Disposition]!,
     disposition(_id: ID!): Disposition,
     games: [Game],
   }
@@ -33,6 +33,7 @@ export const typeDefs = `
     updateFieldState(dispositionId: ID!, index: Int!, state: Int!): Boolean,
     createGame(userId: ID!): Game
     deleteGame(id: ID!): ID
+    createDisposition(gameId: ID!, userId: ID!): Disposition
   }
 
   type Subscription {

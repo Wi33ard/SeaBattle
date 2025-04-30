@@ -5,10 +5,12 @@ import { GET_DISPOSITIONS } from '../../graphql/queries';
 import { useAppDispatch } from '../../utils/hooks/reduxHooks';
 import { useCollisions } from '../../utils/hooks/useCollisions';
 import { setMyDispositionId } from '../../store/gameSlice';
+import { useParams } from 'react-router-dom';
 
 const GameArea = () => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { loading, error, data } = useQuery(GET_DISPOSITIONS);
+  const { loading, error, data } = useQuery(GET_DISPOSITIONS, { variables: { gameId: id }});
   const { isDragging } = useCollisions();
   
   useEffect(() => {

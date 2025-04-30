@@ -4,6 +4,7 @@ export interface Disposition extends Document {
   userId: string;
   gameId: string;
   fields: Int32Array;
+  open: Array<Boolean>;
 };
 
 const DispositionSchema: Schema = new mongoose.Schema(
@@ -11,6 +12,7 @@ const DispositionSchema: Schema = new mongoose.Schema(
     userId: String,
     gameId: String,
     fields: Array<Number>,
+    open: Array<Boolean>,
   }
 );
 
