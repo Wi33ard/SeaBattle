@@ -10,7 +10,7 @@ const generateAccessToken = (id: string, roles: string[]) => {
         id,
         roles
     }
-    return jwt.sign(payload, process.env.SECRET || 'SECRET_KEY', {expiresIn: "24h"} )
+    return jwt.sign(payload, process.env.SECRET_KEY || 'SECRET_KEY', {expiresIn: "24h"} )
 }
 
 class AuthController {

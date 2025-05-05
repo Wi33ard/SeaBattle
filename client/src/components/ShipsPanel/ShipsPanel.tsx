@@ -15,7 +15,7 @@ type TDeckCount = '1' | '2' | '3' | '4';
 const ShipsPanel = () => {
   const [isPanelShown, setPanelShown] = useState(false);
   const left = isPanelShown ? '0' : '-300px';
-  const toggleButtonText = isPanelShown ? '<<' : '>>';
+  const toggleButtonText = isPanelShown ? '⟽' : '⟾';
   const ships = useAppSelector((state) => state.pier.ships)
 
   const handleTogglePanel = useCallback(() => {

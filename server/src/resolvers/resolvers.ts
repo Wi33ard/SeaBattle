@@ -26,11 +26,20 @@ const resolvers = {
     // @ts-ignore
     disposition: async (_parent, args, _context, _info) => {
       const disposition = await Disposition.findOne({ _id: args._id });
+      if (disposition) {
+        disposition.fields = disposition.fields.map((field, index) => disposition.open[index] ? field : -1);
+      }
+      console.log('disposition: ', disposition);
+      return disposition;
+    },
+    // @ts-ignore
+    ownDisposition: async (_parent, args, _context, _info) => {
+      const disposition = await Disposition.findOne({ _id: args._id });
+      console.log('ownDisposition: ', disposition);
       return disposition;
     },
     games: async () => {
       const games = await Game.find({}).populate('user1').populate('user2');
-      console.log('games: ', games);
       return games;
     }
   },
@@ -39,15 +48,39 @@ const resolvers = {
   Mutation: {
     updateFieldState: (async (_parent: {}, args: {dispositionId: string, index: number, state: number}, _context: {}) => {
       const { dispositionId, index, state } = args;
-      console.log("index: ", index);
 
       const dispositionUpdated = await Disposition.findOneAndUpdate(
         { _id: dispositionId },
-        { $set: {[`fields.${index}`]: state } },
+        { $set: {
+          [`fields.${index}`]: state,
+        }},
         { new: true }
       );
 
-      console.log("dispositionUpdated: ", dispositionUpdated);
+      pubsub.publish(DISPOSITION_UPDATED, { dispositionUpdated });
+
+      return true;
+    }),
+    makeShot: (async (_parent: {}, args: {dispositionId: string, index: number}, _context: {}) => {
+      const { dispositionId, index } = args;
+
+      const disposition = await Disposition.findOne({ _id: dispositionId });
+
+      if (!disposition) {
+        return false;
+      }
+
+      const newState = disposition.fields[index] === 1 ? 2 : disposition.fields[index];
+
+      const dispositionUpdated = await Disposition.findOneAndUpdate(
+        { _id: dispositionId },
+        { $set: {
+          [`fields.${index}`]: newState,
+          [`open.${index}`]: true,
+        }},
+        { new: true }
+      );
+
       pubsub.publish(DISPOSITION_UPDATED, { dispositionUpdated });
 
       return true;

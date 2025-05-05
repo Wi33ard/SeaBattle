@@ -1,8 +1,9 @@
 import { gql } from "@apollo/client";
 
-export const GET_DISPOSITION = gql`
-  query getDisposition($id: ID!) {
-    disposition(_id: $id) {
+export const GET_OWN_DISPOSITION = gql`
+  query getOwnDisposition($id: ID!) {
+    ownDisposition(_id: $id) {
+      id
       gameId
       userId
       fields
@@ -10,9 +11,10 @@ export const GET_DISPOSITION = gql`
   }
 `;
 
-export const DISPOSITION_UPDATED_SUBSCRIPTION = gql`
-  subscription DispositionUpdated($id: ID!) {
-    dispositionUpdated(_id: $id) {
+export const GET_DISPOSITION = gql`
+  query getDisposition($id: ID!) {
+    disposition(_id: $id) {
+      id
       gameId
       userId
       fields
@@ -26,7 +28,6 @@ export const GET_DISPOSITIONS = gql`
       id
       userId
       gameId
-      fields
     }
   }
 `;

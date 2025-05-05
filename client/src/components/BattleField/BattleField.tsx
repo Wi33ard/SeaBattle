@@ -3,10 +3,10 @@ import { useQuery, useSubscription } from '@apollo/client';
 import { BattleFieldCell } from '../BattleFieldCell/BattleFieldCell';
 import HorizontalScale from './components/HorizontalScale/HorizontalScale';
 import VerticalScale from './components/VerticalScale/VerticalScale';
-import { DISPOSITION_UPDATED_SUBSCRIPTION, GET_DISPOSITION } from '../../graphql/queries';
+import { GET_DISPOSITION, GET_OWN_DISPOSITION } from '../../graphql/queries';
+import { DISPOSITION_UPDATED_SUBSCRIPTION } from '../../graphql/subscriptions';
 import { CellState, Disposition } from '../../types';
 import { useAppSelector } from '../../utils/hooks/reduxHooks';
-import { INITIAL_OWN_DISPOSITION, INITIAL_RIVAL_DISPOSITION } from '../../const';
 import './styles/BattleField.css';
 
 interface BattleFieldProps {
@@ -14,11 +14,15 @@ interface BattleFieldProps {
 }
 
 export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
-  const { loading, error, data, refetch } = useQuery<{disposition: Disposition}>(GET_DISPOSITION, { variables: { id: dispositionId }});
-  const { data: updatedData } = useSubscription(DISPOSITION_UPDATED_SUBSCRIPTION, { variables: { id: dispositionId }});
   const myDispositionId = useAppSelector((state) => state.game.myDispositionId);
   const isMyDisposition = dispositionId === myDispositionId;
-  const disposition = isMyDisposition ? INITIAL_OWN_DISPOSITION : INITIAL_RIVAL_DISPOSITION;
+  const getDispositionQuery = isMyDisposition ? GET_OWN_DISPOSITION : GET_DISPOSITION;
+  const { loading, error, data, refetch } = useQuery<{ disposition : Disposition, ownDisposition : Disposition}>
+    (getDispositionQuery, { variables: { id: dispositionId }});
+  const { data: updatedData } = useSubscription(DISPOSITION_UPDATED_SUBSCRIPTION, { variables: { id: dispositionId }});
+  const disposition = data?.ownDisposition ?? data?.disposition;
+
+  console.log('data: ', data);
 
   useEffect(() => {
     refetch({ id: dispositionId })
@@ -32,11 +36,10 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
       <HorizontalScale />
       <VerticalScale />
       <div className='battle-field'>
-        { data?.disposition?.fields.map((field, index) => {
-        // { disposition.map((field, index) => {
+        { disposition?.fields.map((field, index) => {
           return (
             <BattleFieldCell
-              key={index}
+              key={`${disposition.id}-${index}`}
               index={index}
               cellState={field as CellState}
               dispositionId={dispositionId}

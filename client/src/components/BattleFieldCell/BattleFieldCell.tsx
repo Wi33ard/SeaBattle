@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
-import { SET_CELL_STATUS } from '../../graphql/mutations';
+import { MAKE_SHOT, SET_CELL_STATUS } from '../../graphql/mutations';
 import { CellState } from '../../types';
 import { useDroppable } from '@dnd-kit/core';
 import { useCollisions } from '../../utils/hooks/useCollisions';
@@ -20,6 +20,7 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({
   isMyDisposition
 }) => {
   const [updateFieldState, { data, loading, error }] = useMutation(SET_CELL_STATUS);
+  const [ makeShot ] = useMutation(MAKE_SHOT);
   const { collisions, isDragging } = useCollisions();
   const id = `${dispositionId}-${index}`;
 
@@ -48,16 +49,19 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({
   }, []);
 
   const handleCellClick = useCallback(() => {
-    let newState = CellState.Empty;
-
-    if (!isMyDisposition) {
-      newState = cellState === CellState.Occupied ? CellState.Damaged : CellState.Empty;
+    if (isMyDisposition) {
+      const newState = cellState === CellState.Occupied ? CellState.Empty : CellState.Occupied;
+      updateFieldState({ variables: { dispositionId, index, state: newState } });
     } else {
-      newState = cellState === CellState.Occupied ? CellState.Empty: CellState.Occupied;
+      makeShot({ variables: { dispositionId, index } });
     }    
-    
-    updateFieldState({ variables: { dispositionId, index, state: newState } });
-  }, [cellState, dispositionId, index, updateFieldState]);
+  }, [cellState, dispositionId, index, isMyDisposition, makeShot, updateFieldState]);
+
+  if (loading) {
+    return (
+      <div className='battle-field-cell' />
+    )
+  }
 
   return (
     <div
@@ -66,7 +70,7 @@ export const BattleFieldCell: React.FC<BattleFieldCellProps> = ({
       className={`battle-field-cell ${getStyleName(cellState)} ${showIsOver ? 'is-over' : ''}`}
       data-is-over={showIsOver}
     >
-      {index}
+      {/* {index} */}
     </div>
   )
 }

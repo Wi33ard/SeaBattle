@@ -31,6 +31,7 @@ export type Game = {
 }
 
 export type Disposition = {
+  id: string,
   userId: string,
   gameId: string,
   fields: Number[],

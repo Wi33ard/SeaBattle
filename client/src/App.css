@@ -45,6 +45,18 @@ button:hover {
   color: #edeef1;
 }
 
+input {
+  width: 14rem;
+  height: 2.5rem;
+  background: rgb(5, 17, 28);
+  color: #c6c7ca;
+  font-size: large;
+  letter-spacing: .2rem;
+  border-radius: 4px;
+  padding: .2rem .5rem;
+  text-align: center;
+}
+
 @keyframes App-logo-animation {
   from {
     transform: translateX(-50%);

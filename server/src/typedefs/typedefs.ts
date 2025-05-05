@@ -12,6 +12,7 @@ export const typeDefs = `
     userId: ID!
     gameId: ID!
     fields: [Int]!
+    open: [Boolean]
   }
   
   type Game {
@@ -26,11 +27,13 @@ export const typeDefs = `
     users: [User]!,
     dispositions(gameId: ID!): [Disposition]!,
     disposition(_id: ID!): Disposition,
+    ownDisposition(_id: ID!): Disposition,
     games: [Game],
   }
 
   type Mutation {
     updateFieldState(dispositionId: ID!, index: Int!, state: Int!): Boolean,
+    makeShot(dispositionId: ID!, index: Int!): Boolean,
     createGame(userId: ID!): Game
     deleteGame(id: ID!): ID
     createDisposition(gameId: ID!, userId: ID!): Disposition

@@ -10,6 +10,15 @@ export const SET_CELL_STATUS = gql`
   }
 `;
 
+export const MAKE_SHOT = gql`
+  mutation MakeShot($dispositionId: ID!, $index: Int!) {
+    makeShot (
+      dispositionId: $dispositionId,
+      index: $index,
+    )
+  }
+`;
+
 export const CREATE_GAME = gql`
   mutation CreateGame($userId: ID!) {
     createGame (userId: $userId) {

@@ -18,3 +18,14 @@ export const GAME_DELETED_SUBSCRIPTION = gql`
     gameDeleted
   }
 `;
+
+
+export const DISPOSITION_UPDATED_SUBSCRIPTION = gql`
+  subscription DispositionUpdated($id: ID!) {
+    dispositionUpdated(_id: $id) {
+      gameId
+      userId
+      fields
+    }
+  }
+`;

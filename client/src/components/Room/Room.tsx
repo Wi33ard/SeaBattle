@@ -51,10 +51,10 @@ const Room: React.FC<IRoomProps> = ({ join }) => {
 
   const handleJoinGame = async (gameId: string) => {
     if (gameId) {
-      const disposition = await createDisposition({ variables: {
-        gameId,
-        userId: '63f873fc5dd768d0a905ce76',
-      }});
+      // const disposition = await createDisposition({ variables: {
+      //   gameId,
+      //   userId: '63f873fc5dd768d0a905ce76',
+      // }});
     }
     navigate(`/game/${gameId}`);
     // join(true);

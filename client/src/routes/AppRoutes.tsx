@@ -11,14 +11,6 @@ const AppRoutes = () => {
           <Route path="/room" element={<Room />} />
           <Route path="/game/:id" element={<Game />} />
         </Route>
-      //   {/* <Route element={<AuthLayout />}>
-      //     <Route
-      //       path="login"
-      //       element={<Login />}
-      //       loader={redirectIfUser}
-      //     />
-      //     <Route path="logout" action={logoutUser} />
-      //   </Route> */}
     )
   );
 
