@@ -12,6 +12,7 @@ import { removeShip, TDeckCount } from '../../store/pierSlice';
 import GameArea from '../GameArea/GameArea';
 import { Header } from '../Header/Header';
 import './styles/Game.css';
+import HomeButton from '../HomeButton/HomeButton';
 
 
 export const Game = () => {
@@ -39,6 +40,7 @@ export const Game = () => {
     <div className='main'>
       {/* <Header /> */}
       <GameStateInfo />
+      <HomeButton />
 
       <DndContext
         onDragEnd={handleDragEnd}

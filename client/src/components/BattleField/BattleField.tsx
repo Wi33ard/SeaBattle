@@ -14,6 +14,7 @@ interface BattleFieldProps {
 }
 
 export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
+  const username = useAppSelector((state) => state.auth.user?.name);
   const myDispositionId = useAppSelector((state) => state.game.myDispositionId);
   const isMyDisposition = dispositionId === myDispositionId;
   const getDispositionQuery = isMyDisposition ? GET_OWN_DISPOSITION : GET_DISPOSITION;
@@ -33,6 +34,7 @@ export const BattleField: React.FC<BattleFieldProps> = ({ dispositionId }) => {
 
   return (
     <div className='battle-field-container'>
+      { isMyDisposition && <span className='username'>{username}</span> }
       <HorizontalScale />
       <VerticalScale />
       <div className='battle-field'>

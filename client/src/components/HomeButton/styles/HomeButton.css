@@ -1,0 +1,12 @@
+.home-button {
+  background-color: black;
+  color: lightgreen;
+  padding: 0 .3rem;
+  font-size: 1.25rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 1rem;
+}

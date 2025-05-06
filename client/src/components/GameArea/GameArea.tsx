@@ -1,23 +1,38 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { BattleField } from '../BattleField/BattleField';
 import { GET_DISPOSITIONS } from '../../graphql/queries';
-import { useAppDispatch } from '../../utils/hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks';
 import { useCollisions } from '../../utils/hooks/useCollisions';
 import { setMyDispositionId } from '../../store/gameSlice';
 import { useParams } from 'react-router-dom';
+import { Disposition } from '../../types';
 
 const GameArea = () => {
   const { id } = useParams();
+  const userId = useAppSelector((state) => state.auth.user?.id);
   const dispatch = useAppDispatch();
   const { loading, error, data } = useQuery(GET_DISPOSITIONS, { variables: { gameId: id }});
   const { isDragging } = useCollisions();
+  const [myDisposition, setMyDisposition] = useState<Disposition>();
+  const [opponentDisposition, setOpponentDisposition] = useState<Disposition>();
+
+  console.log('userId: ', userId);
+  console.log('data: ', data);
+  console.log('myDisposition: ', myDisposition);
+  console.log('opponentDisposition: ', opponentDisposition);
   
   useEffect(() => {
-    if (data?.dispositions?.[0]?.id) {
+    if (data && data?.dispositions?.[0]?.userId === userId) {
+      setMyDisposition(data.dispositions[0]);
+      setOpponentDisposition(data.dispositions[1]);
       dispatch(setMyDispositionId(data.dispositions[0].id));
+    } else if (data && data?.dispositions?.[1]?.userId === userId) {
+      setMyDisposition(data.dispositions[1]);
+      setOpponentDisposition(data.dispositions[0]);
+      dispatch(setMyDispositionId(data.dispositions[1].id));
     }
-  }, [data?.dispositions?.[0]?.id, dispatch]); // eslint-disable-line
+  }, [data, dispatch, userId]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -34,12 +49,12 @@ const GameArea = () => {
   }, [isDragging]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  if (error || !myDisposition?.id || !opponentDisposition?.id) return <p>Error : {error?.message}</p>;
   
   return (
     <div className='battle-fields'>
-      <BattleField dispositionId={data.dispositions[0].id} />
-      <BattleField dispositionId={data.dispositions[1].id} />
+      <BattleField dispositionId={myDisposition?.id} />
+      <BattleField dispositionId={opponentDisposition?.id} />
     </div>
   )
 }

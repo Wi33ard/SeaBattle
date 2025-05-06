@@ -3,6 +3,9 @@ import Disposition from "../models/Disposition";
 import User from "../models/User";
 import Game from "../models/Game";
 import { DateTimeResolver } from 'graphql-scalars';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { ApolloError } from 'apollo-server-errors';
 import { DISPOSITION_UPDATED, FIELDS_COUNT, GAME_CREATED, GAME_DELETED } from '../const';
 
 const pubsub = new PubSub();
@@ -119,6 +122,26 @@ const resolvers = {
 
       return disposition;
     }),
+    login: (async (_parent: {}, args: {username: string, password: string}, _context: {}) => {
+      try {
+        const {username: name, password} = args;
+        const user = await User.findOne({name});
+        if (!user) {
+          throw new ApolloError(`Пользователь ${name} не найден`, 'USER_NOT_FOUND');
+        }
+
+        const validPassword = bcrypt.compareSync(password, user.password);
+        if (!validPassword) {
+          throw new ApolloError('Введен неверный пароль', 'WRONG_PASSWORD');
+        }
+        
+        const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY || 'SECRET_KEY', {expiresIn: "24h"} );
+        return { id: user.id, token };
+      } catch (e) {
+        console.log(e);
+        throw new ApolloError('Error occured in login process', 'LOGIN_ERROR');
+      }
+    })
   },
 
   // S U B S C R I P T I O N S

@@ -30,6 +30,11 @@ export const typeDefs = `
     ownDisposition(_id: ID!): Disposition,
     games: [Game],
   }
+  
+  type LoginResponse {
+    id: String
+    token: String
+  }
 
   type Mutation {
     updateFieldState(dispositionId: ID!, index: Int!, state: Int!): Boolean,
@@ -37,6 +42,7 @@ export const typeDefs = `
     createGame(userId: ID!): Game
     deleteGame(id: ID!): ID
     createDisposition(gameId: ID!, userId: ID!): Disposition
+    login(username: String!, password: String!): LoginResponse
   }
 
   type Subscription {

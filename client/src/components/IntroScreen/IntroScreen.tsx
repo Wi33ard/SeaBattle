@@ -1,21 +1,23 @@
 import { useCallback, useState } from "react";
 import { LoginForm } from "../LoginForm/LoginForm";
-import logo from "../../assets/icons/cruiser-military.svg";
-import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../../utils/hooks/reduxHooks";
+import { useNavigate } from "react-router-dom";
+import logo from "../../assets/icons/cruiser-military.svg";
 
 
 const IntroScreen = () => {
-  const isLoggedIn = Boolean(useAppSelector((state) => state.auth.user));
   const [isLoginVisible, setIsLoginVisible] = useState(false);
+  const username = useAppSelector((state) => state.auth.user?.name);
+  const navigate = useNavigate();
   
-  const handleShowLogin = useCallback(() => {
-    setIsLoginVisible(true);
-  }, []);
+  const handleEnter = useCallback(() => {
+    if (!username) {
+      setIsLoginVisible(true);
+    } else {
+      navigate('/room');
+    }
+  }, [navigate, username]);
 
-  if (isLoggedIn) {
-    return <Outlet />
-  }
 
   return (
     <div className="App">
@@ -25,7 +27,7 @@ const IntroScreen = () => {
       { isLoginVisible ? (
         <LoginForm />
       ) : (
-        <button onClick={handleShowLogin}>⚓Enter</button>
+        <button onClick={handleEnter}>⚓Enter</button>
       )}
     </header>
     <main></main>

@@ -19,7 +19,8 @@ export const authSlice = createSlice({
 
       state.user = {
         name: action.payload.username,
-        email: 'john@gmail.com'
+        id: action.payload.id,
+        email: ''
       };
     },
   },

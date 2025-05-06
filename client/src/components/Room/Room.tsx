@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState, MouseEvent } from 'react';
+import { useAppSelector } from '../../utils/hooks/reduxHooks';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import { CREATE_DISPOSITION, CREATE_GAME, DELETE_GAME } from '../../graphql/mutations';
 import { GAME_CREATED_SUBSCRIPTION, GAME_DELETED_SUBSCRIPTION } from '../../graphql/subscriptions';
@@ -12,6 +13,7 @@ interface IRoomProps {
 }
 
 const Room: React.FC<IRoomProps> = ({ join }) => {
+  const userId = useAppSelector((state) => state.auth.user?.id);
   const { data, refetch } = useQuery<{ games: Game[] }>(GET_GAMES);
   const [createGame] = useMutation(CREATE_GAME);
   const [deleteGame] = useMutation(DELETE_GAME);
@@ -29,7 +31,7 @@ const Room: React.FC<IRoomProps> = ({ join }) => {
 
   useEffect(() => {
     refetch();
-  }, [gameCreated?.gameCreated.id]);
+  }, [gameCreated?.gameCreated.id, refetch]);
 
   useEffect(() => {
     console.log(deletedData);
@@ -37,27 +39,26 @@ const Room: React.FC<IRoomProps> = ({ join }) => {
   }, [deletedData]);
 
   const handleCreateGame = async () => {
-    const game = await createGame({ variables: {
-      userId: '63f874a55dd768d0a905ce77'
-    } });
-    console.log('new game: ', game);
-    if (game.data?.createGame?.id) {
-      const disposition = await createDisposition({ variables: {
-        gameId: game.data?.createGame?.id,
-        userId: '63f874a55dd768d0a905ce77',
-      }});
+    if (userId) {
+      const game = await createGame({ variables: { userId } });
+      console.log('new game: ', game);
+      if (game.data?.createGame?.id) {
+        await createDisposition({ variables: {
+          gameId: game.data?.createGame?.id,
+          userId,
+        }});
+      }
     }
   };
 
   const handleJoinGame = async (gameId: string) => {
     if (gameId) {
-      // const disposition = await createDisposition({ variables: {
+      // await createDisposition({ variables: {
       //   gameId,
-      //   userId: '63f873fc5dd768d0a905ce76',
+      //   userId,
       // }});
     }
     navigate(`/game/${gameId}`);
-    // join(true);
   }
 
   const handleDeleteGame = (event: MouseEvent<HTMLSpanElement>, id: string) => {
